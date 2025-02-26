@@ -35,7 +35,7 @@ export default function Home() {
 
         ax.get(url, { headers: { Authorization: `Bearer ${token}` } })
             .then(({ data }) => {
-                //console.log(data.data);
+                //console.log(data.data.data);
                 setNote(data.data.data);
                 setNextPage(data.data.next_page_url);
                 setLoad(false)
@@ -47,7 +47,7 @@ export default function Home() {
         const token = localStorage.getItem("token");
         ax.get(nextPage, { headers: { Authorization: `Bearer ${token}` } }).then(({ data }) => {
             setLoadMore(false)
-            setNote([...note, data.data.data]);
+            setNote([...note, ...data.data.data]);
             setNextPage(data.data.next_page_url);
         })
     }
@@ -71,20 +71,16 @@ export default function Home() {
                                         {note.map((data) => (
                                             <div className="col-md-4 mb-3" key={data.id}>
                                                 <div className="card">
+                                                    {/* <Link to={`/note/${data.slug}`}>s</Link> */}
                                                     <div className="card-header" style={{ backgroundColor: data.color }}>
                                                         <h5 className='text-white text-center'>{data.title}</h5>
                                                     </div>
                                                     <div className="card-body">
                                                         <div className="row">
                                                             <div className="col-md-4 text-center">
-                                                                <a href="" className='badge badge-primary'>
+                                                                <Link to={`/note/${data.slug}`} className='badge badge-primary'>
                                                                     <i className="fas fa-eye text-black fs-6"></i>
-                                                                </a>
-                                                            </div>
-                                                            <div className="col-md-4 text-center">
-                                                                <a href="" className='badge badge-primary'>
-                                                                    <i className="fa-duotone fa-regular fa-pen-to-square text-black fs-6"></i>
-                                                                </a>
+                                                                </Link>
                                                             </div>
                                                             <div className="col-md-4 text-center">
                                                                 <a href="" className='badge badge-primary'>
