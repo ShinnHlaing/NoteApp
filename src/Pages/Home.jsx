@@ -17,6 +17,7 @@ export default function Home() {
     const [load, setLoad] = useState(true);
     const token = localStorage.getItem("token")
     //console.log(category_slug);
+
     // render note by category_slug when user click on category
     useEffect(() => {
         setLoad(true)
@@ -30,12 +31,12 @@ export default function Home() {
         var url = "/note";
         if (category_slug) {
             url += "?category_slug=" + category_slug;
-            // console.log(url);
+            //console.log(url);
         }
 
         ax.get(url, { headers: { Authorization: `Bearer ${token}` } })
             .then(({ data }) => {
-                //console.log(data.data.data);
+                // console.log(data.data.data);
                 setNote(data.data.data);
                 setNextPage(data.data.next_page_url);
                 setLoad(false)

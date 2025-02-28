@@ -17,13 +17,13 @@ export const LabelContextProvider = (props) => {
                 const { data } = res.data;
                 setLabel(data);
                 setLoad(false)
-                console.log(data);
+                // console.log(data);
             })
             .catch(error => {
                 console.error("Error fetching data: ", error);
                 setLoad(false);
             });
-    }, [token])
+    }, [])
 
     return (
         <LabelContext.Provider value={{ label, setLabel, load, setLoad, activeLabel, setActiveLabel }}>

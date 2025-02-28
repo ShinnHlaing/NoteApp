@@ -45,7 +45,7 @@ const Edit = () => {
         formData.append("_method", "PUT")
         ax.post("/note/" + slug, formData, { headers: { Authorization: `Bearer ${token}` } }).then(({ data }) => {
             setLoader(false)
-            console.log(data);
+            // console.log(data);
 
             if (data.success === false) {
                 setMessage({ type: "error", message: "Pls fillout all fields!" });
