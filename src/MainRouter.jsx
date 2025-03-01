@@ -8,6 +8,7 @@ import Edit from './Pages/Note/Edit'
 import All from './Pages/Label/All'
 import CreateLable from './Pages/Label/CreateLable'
 import EditLabel from './Pages/Label/EditLabel'
+import SearchUser from './Pages/Contribute/SearchUser'
 
 export default function MainRouter() {
     return (
@@ -24,6 +25,8 @@ export default function MainRouter() {
             <Route path="/label" element={<All />} />
             <Route path="/label/create" element={<CreateLable />} />
             <Route path="/label/edit/:slug" element={<EditLabel />} />
+            {/* contribute */}
+            <Route path="/contribute/:slug" element={<SearchUser />} />
         </Routes>
     )
 }

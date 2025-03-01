@@ -1,13 +1,29 @@
 import React from 'react'
 import Spinner from './Spinner'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import LabelContext from '../Contex/LabelContext'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-
+import ax from '../ax'
 export default function Label() {
-    const { load, label, activeLabel, setActiveLabel } = useContext(LabelContext)
+    const { label, setLabel, load, setLoad, activeLabel, setActiveLabel } = useContext(LabelContext)
     const { pathname } = useLocation();
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        ax.get("/category", { headers: { Authorization: "Bearer " + token } })
+            .then((res) => {
+                const { data } = res.data;
+                setLabel(data);
+                setLoad(false)
+                // console.log(data);
+            })
+            .catch(error => {
+                console.error("Error fetching data: ", error);
+                setLoad(false);
+            });
+    }, [])
+
     const render = () => {
         setActiveLabel(null)
         navigate("/")

@@ -7,6 +7,7 @@ import Label from '../Components/Label'
 import ax from '../ax'
 import Spinner from '../Components/Spinner'
 
+
 export default function Home() {
     const messageContext = useContext(MessageContext);
     const navigate = useNavigate();
@@ -15,8 +16,12 @@ export default function Home() {
     const [nextPage, setNextPage] = useState("");
     const [loadMore, setLoadMore] = useState(false);
     const [load, setLoad] = useState(true);
+    const [deleteLoad, setDeleteLoad] = useState('');
     const token = localStorage.getItem("token")
-    //console.log(category_slug);
+    const [contributeLoad, setContributeLoad] = useState(true);
+    const [contributeNote, setContributeNote] = useState([]);
+    const [receiveLoad, setreceiveLoad] = useState(true);
+    const [receiveNote, setReceiveNote] = useState([]);
 
     // render note by category_slug when user click on category
     useEffect(() => {
@@ -41,6 +46,20 @@ export default function Home() {
                 setNextPage(data.data.next_page_url);
                 setLoad(false)
             })
+        // get contribute note
+        ax.get("contribute-note/get", { headers: { Authorization: `Bearer ${token}` } }).then(({ data }) => {
+            setContributeLoad(false)
+            if (data.success) {
+                setContributeNote(data.data.data)
+            }
+        })
+        //get receive note
+        ax.get("receive-note/get", { headers: { Authorization: `Bearer ${token}` } }).then(({ data }) => {
+            setreceiveLoad(false)
+            if (data.success) {
+                setReceiveNote(data.data.data)
+            }
+        })
     }, [category_slug])
 
     const renderNextPage = () => {
@@ -52,14 +71,86 @@ export default function Home() {
             setNextPage(data.data.next_page_url);
         })
     }
+
+    const deleteNote = (slug) => {
+        setDeleteLoad(slug)
+        const token = localStorage.getItem("token");
+        const formData = new FormData();
+        formData.append("_method", "DELETE");
+        ax.post(`/note/${slug}`, formData, { headers: { Authorization: `Bearer ${token}` } })
+            .then(({ data }) => {
+                if (data.success) {
+
+                    setNote(note.filter((data) => data.slug !== slug))
+                    messageContext.setMessage({
+                        type: "success",
+                        message: "Note deleted successfully"
+                    })
+                }
+            })
+    }
     return (
         <Master>
-            <div className="container mt-3">
+            <div className="container mt-5">
                 <div className="row">
                     {/* for category & info */}
                     <div className='col-md-4'>
                         <Label />
-                        {/*  */}
+                        {/* contribute note */}
+                        <div className="card bg-gray-100 mt-3">
+                            <div className="card-body">
+                                <li className="list-group-item bg-danger text-white d-flex justify-content-between aling-items-center p-1 rounded-1">
+                                    <h5 className=''>Contribute Notes</h5>
+                                    <a className="badge badge-dark text-white" style={{ textDecoration: "none" }} >
+                                        All
+                                    </a>
+                                </li>
+                                {
+                                    contributeLoad ? (<Spinner />) : (
+                                        <ul className='list-group label'>
+                                            {contributeNote && contributeNote.map((data) => (
+                                                <li
+                                                    key={data.id}
+                                                    className="list-group-item bg-dark text-white">
+                                                    <i className="far fa-newspaper" />
+                                                    &nbsp; &nbsp; You got <Link to={`/note/${data.note.slug}`}>{data.note.title}</Link> &nbsp;
+                                                    <small>from</small>
+                                                    &nbsp;
+                                                    <b className="text-primary">{data.receive_user.name}</b>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )
+                                }
+                            </div>
+                        </div>
+                        {/* receive note */}
+                        <div className="card bg-gray-100 mt-3">
+                            <div className="card-body">
+                                <li className="list-group-item bg-danger text-white d-flex justify-content-between aling-items-center p-1 rounded-1">
+                                    <h5>Received Notes</h5>
+                                    <a className="badge badge-dark text-white" style={{ textDecoration: "none" }} >
+                                        All
+                                    </a>
+                                </li>
+                                {
+                                    receiveLoad ? (<Spinner />) : (
+                                        <ul className='list-group label'>
+                                            {receiveNote && receiveNote.map((data) => (
+                                                <li
+                                                    key={data.id}
+                                                    className="list-group-item bg-dark text-white">
+                                                    <i className="far fa-newspaper" />
+                                                    &nbsp; &nbsp; You share <Link to={`/note/${data.note.slug}`}>{data.note.title}</Link> &nbsp;
+                                                    <small>to</small>
+                                                    &nbsp;
+                                                    <b className="text-primary">{data.contribute_user.name}</b>
+                                                </li>)
+                                            )}
+                                        </ul>
+                                    )}
+                            </div>
+                        </div>
                     </div>
                     <div className="col-md-8">
                         <div className="card">
@@ -84,9 +175,14 @@ export default function Home() {
                                                                 </Link>
                                                             </div>
                                                             <div className="col-md-4 text-center">
-                                                                <a href="" className='badge badge-primary'>
+                                                                <Link to={`/contribute/${data.slug}`} className='badge badge-primary'>
                                                                     <i className="fa-solid fa-share text-black fs-6" ></i>
-                                                                </a>
+                                                                </Link>
+                                                            </div>
+                                                            <div className="col-md-4 text-center">
+                                                                <span onClick={() => deleteNote(data.slug)} className='badge badge-primary'>
+                                                                    {deleteLoad == data.slug ? (<Spinner />) : (<i className="fa-solid fa-trash text-black fs-6" ></i>)}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
