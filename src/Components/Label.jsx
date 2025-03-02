@@ -4,6 +4,7 @@ import { useContext, useEffect } from 'react'
 import LabelContext from '../Contex/LabelContext'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import ax from '../ax'
+
 export default function Label() {
     const { label, setLabel, load, setLoad, activeLabel, setActiveLabel } = useContext(LabelContext)
     const { pathname } = useLocation();

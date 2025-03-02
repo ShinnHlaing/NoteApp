@@ -36,7 +36,7 @@ const CreateLable = () => {
                             </div>
                             <div className='form-control mb-3'>
                                 <label htmlFor="">Enter Label</label>
-                                <input value={label} onChange={e => setLabel(e.target.value)} type="text" name="" className='form-control' />
+                                <input value={label} onChange={e => setLabel(e.target.value)} type="text" className='form-control' />
                             </div>
                             <div>
                                 <button onClick={storeLabel} className='btn btn-sm btn-danger' disabled={loader}>

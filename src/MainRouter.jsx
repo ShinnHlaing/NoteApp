@@ -9,6 +9,8 @@ import All from './Pages/Label/All'
 import CreateLable from './Pages/Label/CreateLable'
 import EditLabel from './Pages/Label/EditLabel'
 import SearchUser from './Pages/Contribute/SearchUser'
+import AllReceive from './Pages/Contribute/AllReceive'
+import AllContribute from './Pages/Contribute/AllContribute'
 
 export default function MainRouter() {
     return (
@@ -27,6 +29,8 @@ export default function MainRouter() {
             <Route path="/label/edit/:slug" element={<EditLabel />} />
             {/* contribute */}
             <Route path="/contribute/:slug" element={<SearchUser />} />
+            <Route path="/show/receive" element={<AllReceive />} />
+            <Route path="/show/contribute" element={<AllContribute />} />
         </Routes>
     )
 }

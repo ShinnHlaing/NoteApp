@@ -16,6 +16,7 @@ const All = () => {
         setPageLoader(true)
         const token = localStorage.getItem("token");
         ax.get('/category', { headers: { Authorization: `Bearer ${token}` } }).then(({ data }) => {
+            //console.log(data);
             setPageLoader(false);
             setLabel(data.data);
             //setNextPage(data.next_page_url);

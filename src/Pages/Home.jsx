@@ -11,13 +11,13 @@ import Spinner from '../Components/Spinner'
 export default function Home() {
     const messageContext = useContext(MessageContext);
     const navigate = useNavigate();
+    const token = localStorage.getItem("token")
     const { category_slug } = useParams();
     const [note, setNote] = useState([]);
     const [nextPage, setNextPage] = useState("");
     const [loadMore, setLoadMore] = useState(false);
     const [load, setLoad] = useState(true);
     const [deleteLoad, setDeleteLoad] = useState('');
-    const token = localStorage.getItem("token")
     const [contributeLoad, setContributeLoad] = useState(true);
     const [contributeNote, setContributeNote] = useState([]);
     const [receiveLoad, setreceiveLoad] = useState(true);
@@ -101,9 +101,11 @@ export default function Home() {
                             <div className="card-body">
                                 <li className="list-group-item bg-danger text-white d-flex justify-content-between aling-items-center p-1 rounded-1">
                                     <h5 className=''>Contribute Notes</h5>
-                                    <a className="badge badge-dark text-white" style={{ textDecoration: "none" }} >
+                                    <Link
+                                        to="/show/contribute"
+                                        className="badge badge-dark text-white" style={{ textDecoration: "none" }} >
                                         All
-                                    </a>
+                                    </Link>
                                 </li>
                                 {
                                     contributeLoad ? (<Spinner />) : (
@@ -129,9 +131,11 @@ export default function Home() {
                             <div className="card-body">
                                 <li className="list-group-item bg-danger text-white d-flex justify-content-between aling-items-center p-1 rounded-1">
                                     <h5>Received Notes</h5>
-                                    <a className="badge badge-dark text-white" style={{ textDecoration: "none" }} >
+                                    <Link
+                                        to="/show/receive"
+                                        className="badge badge-dark text-white" style={{ textDecoration: "none" }} >
                                         All
-                                    </a>
+                                    </Link>
                                 </li>
                                 {
                                     receiveLoad ? (<Spinner />) : (
